@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="jquery-3.3.1.min.js"></script>
+    <link href="fingerprint.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="jquery.min.js"></script>
+   <script src="angular-1.3.15/angular.min.js"></script>
+    <script src="jquery.dataTables.min.js"></script>
+    <script src="angular-datatables.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="datatables.bootstrap.css">
+    <script src="sweetalert.js"></script>
+
+    <script>
+        function startTime() {
+
+            var today = new Date();
+            var h = today.getHours();
+            var min = today.getMinutes();
+            var s = today.getSeconds();
+            var y = today.getFullYear();
+            var m = today.getMonth() + 1;
+            var d = today.getDate();
+            min = checkTime(min);
+            s = checkTime(s);
+            document.getElementById('txt').innerHTML =
+                h + ":" + min + ":" + s;
+            var t = setTimeout(startTime, 500);
+            document.getElementById("date").innerHTML = m + "/" + d + "/" + y;
+        }
+
+        function checkTime(i) {
+            if (i < 10) {
+                i = "0" + i
+            }; // add zero in front of numbers < 10
+            return i;
+        }
+    </script>
+    <style>
+        #customers {
+            font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+        #customers td,
+        #customers th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        
+        #customers tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        #customers tr:hover {
+            background-color: #ddd;
+        }
+        
+        #customers th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        input[type=text],
+        select {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        .in {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .in:hover {
+            background-color: #45a049;
+        }
+        
+        .out {
+            width: 100%;
+            background-color: #f44336;
+            ;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .out:hover {
+            background-color: #ff3333;
+        }
+        
+        .lol {
+            margin: 0 auto;
+            width: 50%;
+            height: auto;
+            border: 1px solid #c3ccdf;
+            border-bottom: 3px solid #c3ccdf;
+            border-radius: 2px;
+            background-color: #FFF;
+            padding: 10px;
+        }
+        
+        .lola {
+            margin: 0 auto;
+            width: auto;
+            height: 580px;
+            border: 1px solid #c3ccdf;
+            border-bottom: 3px solid #c3ccdf;
+            border-radius: 2px;
+            background-color: #FFF;
+            padding: 10px;
+        }
+        
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        
+        .topnav {
+            overflow: hidden;
+            background-color: #333;
+        }
+        
+        .topnav a {
+            float: left;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+        }
+        
+        .topnav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        
+        .topnav a.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        .topnav-right {
+            float: right;
+        }
+        
+        img {
+            border-radius: 50%;
+        }
+		
+    </style>
+</head>
+
+<body onload="startTime()" ng-app="crudApp" ng-controller="crudController">
+    <div class="topnav">
+        <a class="active" href="#home">E-AMS</a>
+
+        <div class="topnav-right">
+           <a href="index.html">Home</a>
+            <a href="#about">Manage Employee</a>
+            <a href="attendance.html">Attendance</a>
+        </div>
+    </div>
+    <br>
+    <div class="container-fluid">
+        <div class="lol">
+            <center>
+                <h3>E-AMS</h3></center>
+            <hr>
+            <div style="display:block; width:x; height:y; text-align:right;">
+                <label>Date: </label>
+                <label id="date"></label>
+                <label>Time: </label>
+                <label id="txt"></label>
+            </div>
+	<form method="post" ng-submit="submitForm()">
+            <center><i class="material-icons" style="font-size:100px">fingerprint</i></center>
+            <br>
+            <label for="lname">Enter Employee ID</label>
+            <input type="text" id="emp_id" name="emp_id" placeholder="Your Employee ID.." ng-model="emp_id">
+            <div class="row">
+                <div class="col-lg-6">
+                   <button type="button" ng-click="emp_in()" class="btn btn-success btn-xs">IN</button>
+                </div>
+                <div class="col-lg-6">
+                    <button type="button" ng-click="emp_out()" class="btn btn-danger btn-xs">OUT</button>
+                </div>
+            </div>
+
+        </div>
+	</form>
+
+    </div>
+    </div>
+
+</body>
+
+</html>
+<script>
+   var app = angular.module('crudApp', ['datatables']);
+    app.controller('crudController', function($scope, $http) {
+	        $scope.emp_in = function() {
+            if (confirm("IN?")) {
+                $http({
+                    method: "POST",
+                    url: "insert.php",
+                    data: {
+                        'id': $scope.emp_id,
+                        'action': 'EmpIn'
+                    }
+                }).success(function(data) {
+                    swal('IN', '', 'success').then(function() {
+                    });
+					
+					
+                });
+            }
+        };
+		$scope.emp_out = function() {
+            if (confirm("Out?")) {
+                $http({
+                    method: "POST",
+                    url: "insert.php",
+                    data: {
+                        'id': $scope.emp_id,
+                        'action': 'EmpOut'
+                    }
+                }).success(function(data) {
+                    swal('Out', '', 'success').then(function() {
+                    });
+					
+					
+                });
+            }
+        };
+	   });
+</script>
